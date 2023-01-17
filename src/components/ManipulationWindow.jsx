@@ -5,16 +5,19 @@ const ManipulationWindow = ({
   selectedPiece,
   handleRotation,
   handleReflection,
+  activePlayer,
 }) => {
-  // console.log(selectedPiece);
-  // console.log(`rotate(${selectedRotation * 90})`);
   return (
     <div className="sidewindow">
       ManipulationWindow
       <div className="manipulationwindow">
-        <PieceWrapper coords={selectedPiece} />
+        <PieceWrapper
+          coords={selectedPiece.coords}
+          activePlayer={activePlayer}
+        />
       </div>
       <button
+        className="button"
         onClick={(e) => {
           e.preventDefault();
           handleRotation(-1);
@@ -23,6 +26,7 @@ const ManipulationWindow = ({
         Rotate Left
       </button>
       <button
+        className="button"
         onClick={(e) => {
           e.preventDefault();
           handleRotation(1);
@@ -30,8 +34,13 @@ const ManipulationWindow = ({
       >
         Rotate Right
       </button>
-      <button onClick={(e) => handleReflection("vertical")}>Flip Up</button>
-      <button onClick={(e) => handleReflection("horizontal")}>
+      <button className="button" onClick={(e) => handleReflection("vertical")}>
+        Flip Up
+      </button>
+      <button
+        className="button"
+        onClick={(e) => handleReflection("horizontal")}
+      >
         Flip Sideways
       </button>
     </div>

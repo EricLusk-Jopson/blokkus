@@ -282,21 +282,47 @@ function App() {
     setTurn(turn + 1);
   };
 
+  const skipTurn = () => {
+    if (activePlayer === "player1") {
+      setActivePlayer("player2");
+      setSelectedPiece(
+        pieces.playerTwo.find((piece) => piece.status != "used")
+      );
+    } else {
+      setActivePlayer("player1");
+      setSelectedPiece(
+        pieces.playerOne.find((piece) => piece.status != "used")
+      );
+    }
+    setTurn(turn + 1);
+  };
+
+  useEffect(() => {
+    console.log(turn);
+  }, [turn]);
+
   return (
     <div className="App">
       {activePlayer === "player1" ? (
-        <PieceBoard
-          pieces={pieces.playerOne}
-          handleSelection={handleSelection}
-          activePlayer={activePlayer}
-        />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <PieceBoard
+            pieces={pieces.playerOne}
+            handleSelection={handleSelection}
+            activePlayer={activePlayer}
+          />
+          <button className="button" onClick={skipTurn}>
+            Skip Turn
+          </button>
+        </div>
       ) : (
-        <ManipulationWindow
-          selectedPiece={selectedPiece}
-          handleRotation={handleRotation}
-          handleReflection={handleReflection}
-          activePlayer={activePlayer}
-        />
+        <>
+          <ManipulationWindow
+            selectedPiece={selectedPiece}
+            handleRotation={handleRotation}
+            handleReflection={handleReflection}
+            activePlayer={activePlayer}
+          />
+        </>
       )}
       <Board
         board={board}
@@ -317,11 +343,16 @@ function App() {
           activePlayer={activePlayer}
         />
       ) : (
-        <PieceBoard
-          pieces={pieces.playerTwo}
-          handleSelection={handleSelection}
-          activePlayer={activePlayer}
-        />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <PieceBoard
+            pieces={pieces.playerTwo}
+            handleSelection={handleSelection}
+            activePlayer={activePlayer}
+          />
+          <button className="button" onClick={skipTurn}>
+            Skip Turn
+          </button>
+        </div>
       )}
     </div>
   );

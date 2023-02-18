@@ -269,8 +269,16 @@ function App() {
     setBoard(tempBoard);
     if (activePlayer === "player1") {
       setActivePlayer("player2");
-    } else setActivePlayer("player1");
-    setSelectedPiece(initialPieces[0]);
+      setSelectedPiece(
+        pieces.playerTwo.find((piece) => piece.status != "used")
+      );
+    } else {
+      setActivePlayer("player1");
+      setSelectedPiece(
+        pieces.playerOne.find((piece) => piece.status != "used")
+      );
+    }
+
     setTurn(turn + 1);
   };
 

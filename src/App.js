@@ -60,19 +60,22 @@ function App() {
     switch (axis) {
       case "vertical":
         selectedCoords.forEach((coord) => {
-          reflectedCoords.push([-coord[0] + yMax, coord[1]]);
+          reflectedCoords.push([-coord[0], coord[1]]);
         });
         break;
 
       case "horizontal":
         selectedCoords.forEach((coord) => {
-          reflectedCoords.push([coord[0], -coord[1] + xMax]);
+          reflectedCoords.push([coord[0], -coord[1]]);
         });
         break;
 
       default:
         break;
     }
+
+    reflectedCoords.forEach((reflectedCoord) => {});
+    console.log(Math.min());
     const newPiece = { ...selectedPiece };
     newPiece.coords = reflectedCoords;
     setSelectedPiece(newPiece);

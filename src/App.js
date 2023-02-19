@@ -3,6 +3,7 @@ import "./App.css";
 import PieceBoard from "./components/PieceBoard.jsx";
 import Board from "./components/Board.jsx";
 import ManipulationWindow from "./components/ManipulationWindow";
+import WinnerModal from "./components/WinnerModal";
 import { initialPieces } from "./initialStates/initialPieces";
 import { initialBoard, zeroBoard } from "./initialStates/initialBoard";
 import { newZeroBoard } from "./helpers/newZeroBoard";
@@ -23,6 +24,8 @@ function App() {
   const [shadedTiles, setShadedTiles] = useState(zeroBoard);
   const [shadedCoords, setShadedCoords] = useState([]);
   const [turn, setTurn] = useState(1);
+  const [winner, setWinner] = useState(null);
+  const [playersSkipped, setPlayersSkipped] = useState([]);
 
   const handleSelection = (e, status) => {
     e.preventDefault();
@@ -294,6 +297,13 @@ function App() {
         pieces.playerOne.find((piece) => piece.status != "used")
       );
     }
+
+    if (!playersSkipped.includes(activePlayer)) {
+      const tempPlayersSkipped = [...playersSkipped];
+      tempPlayersSkipped.push(activePlayer);
+      setPlayersSkipped(tempPlayersSkipped);
+    }
+
     setTurn(turn + 1);
   };
 
@@ -302,59 +312,62 @@ function App() {
   }, [turn]);
 
   return (
-    <div className="App">
-      {activePlayer === "player1" ? (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <PieceBoard
-            pieces={pieces.playerOne}
-            handleSelection={handleSelection}
-            activePlayer={activePlayer}
-          />
-          <button className="button" onClick={skipTurn}>
-            Skip Turn
-          </button>
-        </div>
-      ) : (
-        <>
+    <>
+      <div className="App">
+        {activePlayer === "player1" ? (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <PieceBoard
+              pieces={pieces.playerOne}
+              handleSelection={handleSelection}
+              activePlayer={activePlayer}
+            />
+            <button className="button" onClick={skipTurn}>
+              Skip Turn
+            </button>
+          </div>
+        ) : (
+          <>
+            <ManipulationWindow
+              selectedPiece={selectedPiece}
+              handleRotation={handleRotation}
+              handleReflection={handleReflection}
+              activePlayer={activePlayer}
+            />
+          </>
+        )}
+        <Board
+          board={board}
+          shadedTiles={shadedTiles}
+          shadedCoords={shadedCoords}
+          selectedPiece={selectedPiece}
+          activePlayer={activePlayer}
+          turn={turn}
+          handleOnMouseEnter={handleOnMouseEnter}
+          handleOnMouseLeave={handleOnMouseLeave}
+          handlePlay={handlePlay}
+        />
+        {activePlayer === "player1" ? (
           <ManipulationWindow
             selectedPiece={selectedPiece}
             handleRotation={handleRotation}
             handleReflection={handleReflection}
             activePlayer={activePlayer}
           />
-        </>
-      )}
-      <Board
-        board={board}
-        shadedTiles={shadedTiles}
-        shadedCoords={shadedCoords}
-        selectedPiece={selectedPiece}
-        activePlayer={activePlayer}
-        turn={turn}
-        handleOnMouseEnter={handleOnMouseEnter}
-        handleOnMouseLeave={handleOnMouseLeave}
-        handlePlay={handlePlay}
-      />
-      {activePlayer === "player1" ? (
-        <ManipulationWindow
-          selectedPiece={selectedPiece}
-          handleRotation={handleRotation}
-          handleReflection={handleReflection}
-          activePlayer={activePlayer}
-        />
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <PieceBoard
-            pieces={pieces.playerTwo}
-            handleSelection={handleSelection}
-            activePlayer={activePlayer}
-          />
-          <button className="button" onClick={skipTurn}>
-            Skip Turn
-          </button>
-        </div>
-      )}
-    </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <PieceBoard
+              pieces={pieces.playerTwo}
+              handleSelection={handleSelection}
+              activePlayer={activePlayer}
+            />
+            <button className="button" onClick={skipTurn}>
+              Skip Turn
+            </button>
+          </div>
+        )}
+      </div>
+      {winner && <WinnerModal></WinnerModal>}
+    </>
   );
 }
 

@@ -58,11 +58,11 @@ code {
   z-index: 0;
 }
 
-.piece-player1 {
+.piece-0 {
   background-color: purple;
 }
 
-.piece-player2 {
+.piece-1 {
   background-color: orange;
 }
 
@@ -102,11 +102,11 @@ code {
   width: 7.14%;
 }
 
-.tile-player1 {
+.tile-0 {
   background-color: purple;
 }
 
-.tile-player2 {
+.tile-1 {
   background-color: orange;
 }
 
@@ -116,4 +116,17 @@ code {
 
 .shaded-invalid {
   background-color: hsla(0, 59%, 41%, 0.35);
+}
+
+.modal {
+  /* display: none; Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 11; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import PieceBoard from "./components/PieceBoard.jsx";
 import Board from "./components/Board.jsx";
 import ManipulationWindow from "./components/ManipulationWindow";
+import WinnerModal from "./components/WinnerModal";
 import { initialPieces } from "./initialStates/initialPieces";
 import { initialBoard, zeroBoard } from "./initialStates/initialBoard";
 import { newZeroBoard } from "./helpers/newZeroBoard";
@@ -13,16 +14,19 @@ const first = 0;
 const last = 13;
 
 function App() {
-  const [activePlayer, setActivePlayer] = useState("player1");
+  const numberOfPlayers = 2;
+  const [activePlayer, setActivePlayer] = useState(0);
+  const [skipped, setSkipped] = useState([false, false]);
   const [board, setBoard] = useState(initialBoard);
   const [pieces, setPieces] = useState({
-    playerOne: [...initialPieces],
-    playerTwo: [...initialPieces],
+    0: [...initialPieces],
+    1: [...initialPieces],
   });
   const [selectedPiece, setSelectedPiece] = useState({ ...initialPieces[0] });
   const [shadedTiles, setShadedTiles] = useState(zeroBoard);
   const [shadedCoords, setShadedCoords] = useState([]);
   const [turn, setTurn] = useState(1);
+  const [gameWon, setGameWon] = useState(false);
 
   const handleSelection = (e, status) => {
     e.preventDefault();
@@ -123,7 +127,7 @@ function App() {
       return;
     }
 
-    if (activePlayer !== "player1" && activePlayer !== "player2") {
+    if (activePlayer !== 0 && activePlayer !== 1) {
       return;
     }
 
@@ -132,10 +136,10 @@ function App() {
     // set ownership and playability of shaded tiles
     shadedCoords.forEach((coord) => {
       tempBoard[coord[row]][coord[col]].occupant = activePlayer;
-      tempBoard[coord[row]][coord[col]].isPlayable.player1 = false;
-      tempBoard[coord[row]][coord[col]].isPlayable.player2 = false;
-      tempBoard[coord[row]][coord[col]].isSeedable.player1 = false;
-      tempBoard[coord[row]][coord[col]].isSeedable.player2 = false;
+      tempBoard[coord[row]][coord[col]].isPlayable[0] = false;
+      tempBoard[coord[row]][coord[col]].isPlayable[1] = false;
+      tempBoard[coord[row]][coord[col]].isSeedable[0] = false;
+      tempBoard[coord[row]][coord[col]].isSeedable[1] = false;
     });
 
     // update playablity of adjacent tiles
@@ -249,81 +253,107 @@ function App() {
     });
 
     // Construct a new series of pieces to replace the state
-    const player = activePlayer === "player1" ? "playerOne" : "playerTwo";
     const newPieces = { ...pieces };
-    const playerPieces = [...pieces[player]];
+    const playerPieces = [...pieces[activePlayer]];
     const usedPiece = playerPieces.findIndex(
       (piece) => piece.name === selectedPiece.name
     );
-    const usedTemplateName = pieces[player][usedPiece].name;
-    const usedTemplateCoords = [...pieces[player][usedPiece].coords];
+    const usedTemplateName = pieces[activePlayer][usedPiece].name;
+    const usedTemplateCoords = [...pieces[activePlayer][usedPiece].coords];
     const newPiece = {
       coords: usedTemplateCoords,
       name: usedTemplateName,
       status: "used",
     };
     playerPieces[usedPiece] = newPiece;
-    newPieces[player] = playerPieces;
+    newPieces[activePlayer] = playerPieces;
 
     setPieces(newPieces);
     setBoard(tempBoard);
-    if (activePlayer === "player1") {
-      setActivePlayer("player2");
-      setSelectedPiece(
-        pieces.playerTwo.find((piece) => piece.status != "used")
-      );
-    } else {
-      setActivePlayer("player1");
-      setSelectedPiece(
-        pieces.playerOne.find((piece) => piece.status != "used")
-      );
-    }
-
     setTurn(turn + 1);
   };
 
+  const determineNextPlayer = () => {
+    if (activePlayer === 0) {
+      console.log("player 1 is the active player");
+      if (skipped[1] === true) {
+        console.log("player 2 has already skipped. Player 1 will play again");
+        setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
+      } else {
+        console.log("player 2 will play next");
+        console.log(pieces[1]);
+        setActivePlayer(1);
+        setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
+      }
+    } else {
+      console.log("player 2 is the active player");
+      if (skipped[0] === true) {
+        console.log("player 1 has already skipped. Player 2 will play again");
+        setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
+      } else {
+        console.log("player 1 will play next");
+        setActivePlayer(0);
+        setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
+      }
+    }
+  };
+
+  const skipTurn = () => {
+    console.log(activePlayer);
+    console.log(skipped);
+    const newSkipped = [...skipped];
+    newSkipped[activePlayer] = true;
+    setSkipped(newSkipped);
+    setTurn(turn + 1);
+  };
+
+  useEffect(() => {
+    if (skipped[0] == true && skipped[1] == true) {
+      setGameWon(true);
+    }
+  }, [skipped]);
+
+  useEffect(() => {
+    if (turn > 1) {
+      determineNextPlayer();
+    }
+  }, [turn]);
+
   return (
-    <div className="App">
-      {activePlayer === "player1" ? (
-        <PieceBoard
-          pieces={pieces.playerOne}
-          handleSelection={handleSelection}
+    <>
+      <div className="App">
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <PieceBoard
+            pieces={pieces[activePlayer]}
+            handleSelection={handleSelection}
+            activePlayer={activePlayer}
+          />
+          <button className="button" onClick={skipTurn}>
+            Skip Turn
+          </button>
+        </div>
+
+        <Board
+          board={board}
+          shadedTiles={shadedTiles}
+          shadedCoords={shadedCoords}
+          selectedPiece={selectedPiece}
           activePlayer={activePlayer}
+          turn={turn}
+          handleOnMouseEnter={handleOnMouseEnter}
+          handleOnMouseLeave={handleOnMouseLeave}
+          handlePlay={handlePlay}
         />
-      ) : (
+
         <ManipulationWindow
           selectedPiece={selectedPiece}
           handleRotation={handleRotation}
           handleReflection={handleReflection}
           activePlayer={activePlayer}
         />
-      )}
-      <Board
-        board={board}
-        shadedTiles={shadedTiles}
-        shadedCoords={shadedCoords}
-        selectedPiece={selectedPiece}
-        activePlayer={activePlayer}
-        turn={turn}
-        handleOnMouseEnter={handleOnMouseEnter}
-        handleOnMouseLeave={handleOnMouseLeave}
-        handlePlay={handlePlay}
-      />
-      {activePlayer === "player1" ? (
-        <ManipulationWindow
-          selectedPiece={selectedPiece}
-          handleRotation={handleRotation}
-          handleReflection={handleReflection}
-          activePlayer={activePlayer}
-        />
-      ) : (
-        <PieceBoard
-          pieces={pieces.playerTwo}
-          handleSelection={handleSelection}
-          activePlayer={activePlayer}
-        />
-      )}
-    </div>
+      </div>
+      {gameWon && <WinnerModal></WinnerModal>}
+    </>
   );
 }
 

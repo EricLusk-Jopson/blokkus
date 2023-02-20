@@ -31,33 +31,38 @@ const ManipulationWindow = ({
           activePlayer={activePlayer}
         />
       </div>
-      <button
-        className="button"
-        onClick={(e) => {
-          e.preventDefault();
-          handleRotation(-1);
-        }}
-      >
-        Rotate Left
-      </button>
-      <button
-        className="button"
-        onClick={(e) => {
-          e.preventDefault();
-          handleRotation(1);
-        }}
-      >
-        Rotate Right
-      </button>
-      <button className="button" onClick={(e) => handleReflection("vertical")}>
-        Flip Up
-      </button>
-      <button
-        className="button"
-        onClick={(e) => handleReflection("horizontal")}
-      >
-        Flip Sideways
-      </button>
+      <div>
+        <button
+          className="button"
+          onClick={(e) => {
+            e.preventDefault();
+            handleRotation(-1);
+          }}
+        >
+          {"<"}
+        </button>
+        <button
+          className="button"
+          onClick={(e) => {
+            e.preventDefault();
+            handleRotation(1);
+          }}
+        >
+          {">"}
+        </button>
+        <button
+          className="button"
+          onClick={(e) => handleReflection("vertical")}
+        >
+          {"--"}
+        </button>
+        <button
+          className="button"
+          onClick={(e) => handleReflection("horizontal")}
+        >
+          {"|"}
+        </button>
+      </div>
     </div>
   );
 };

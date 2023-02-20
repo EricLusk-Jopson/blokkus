@@ -16,7 +16,7 @@ const last = 13;
 function App() {
   const numberOfPlayers = 2;
   const [activePlayer, setActivePlayer] = useState(0);
-  const [skipped, setSkipped] = useState([false, false]);
+  const [retired, setRetired] = useState([false, false]);
   const [board, setBoard] = useState(initialBoard);
   const [pieces, setPieces] = useState({
     0: [...initialPieces],
@@ -276,8 +276,8 @@ function App() {
   const determineNextPlayer = () => {
     if (activePlayer === 0) {
       console.log("player 1 is the active player");
-      if (skipped[1] === true) {
-        console.log("player 2 has already skipped. Player 1 will play again");
+      if (retired[1] === true) {
+        console.log("player 2 has already retired. Player 1 will play again");
         setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
       } else {
         console.log("player 2 will play next");
@@ -287,8 +287,8 @@ function App() {
       }
     } else {
       console.log("player 2 is the active player");
-      if (skipped[0] === true) {
-        console.log("player 1 has already skipped. Player 2 will play again");
+      if (retired[0] === true) {
+        console.log("player 1 has already retired. Player 2 will play again");
         setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       } else {
         console.log("player 1 will play next");
@@ -300,18 +300,18 @@ function App() {
 
   const skipTurn = () => {
     console.log(activePlayer);
-    console.log(skipped);
-    const newSkipped = [...skipped];
-    newSkipped[activePlayer] = true;
-    setSkipped(newSkipped);
+    console.log(retired);
+    const newRetired = [...retired];
+    newRetired[activePlayer] = true;
+    setRetired(newRetired);
     setTurn(turn + 1);
   };
 
   useEffect(() => {
-    if (skipped[0] == true && skipped[1] == true) {
+    if (retired[0] == true && retired[1] == true) {
       setGameWon(true);
     }
-  }, [skipped]);
+  }, [retired]);
 
   useEffect(() => {
     if (turn > 1) {
@@ -323,14 +323,17 @@ function App() {
     <>
       <div className="App">
         <div style={{ display: "flex", flexDirection: "column" }}>
+          <ManipulationWindow
+            selectedPiece={selectedPiece}
+            handleRotation={handleRotation}
+            handleReflection={handleReflection}
+            activePlayer={activePlayer}
+          />
           <PieceBoard
             pieces={pieces[activePlayer]}
             handleSelection={handleSelection}
             activePlayer={activePlayer}
           />
-          <button className="button" onClick={skipTurn}>
-            Skip Turn
-          </button>
         </div>
 
         <Board
@@ -344,13 +347,9 @@ function App() {
           handleOnMouseLeave={handleOnMouseLeave}
           handlePlay={handlePlay}
         />
-
-        <ManipulationWindow
-          selectedPiece={selectedPiece}
-          handleRotation={handleRotation}
-          handleReflection={handleReflection}
-          activePlayer={activePlayer}
-        />
+        <button className="button" onClick={skipTurn}>
+          Retire
+        </button>
       </div>
       {gameWon && <WinnerModal></WinnerModal>}
     </>

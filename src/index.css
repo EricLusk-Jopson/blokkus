@@ -58,11 +58,11 @@ code {
   z-index: 0;
 }
 
-.piece-player1 {
+.piece-0 {
   background-color: purple;
 }
 
-.piece-player2 {
+.piece-1 {
   background-color: orange;
 }
 
@@ -102,11 +102,11 @@ code {
   width: 7.14%;
 }
 
-.tile-player1 {
+.tile-0 {
   background-color: purple;
 }
 
-.tile-player2 {
+.tile-1 {
   background-color: orange;
 }
 

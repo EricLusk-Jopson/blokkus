@@ -278,8 +278,10 @@ function App() {
       console.log("player 1 is the active player");
       if (skipped[1] === true) {
         console.log("player 2 has already skipped. Player 1 will play again");
+        setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
       } else {
         console.log("player 2 will play next");
+        console.log(pieces[1]);
         setActivePlayer(1);
         setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       }
@@ -287,6 +289,7 @@ function App() {
       console.log("player 2 is the active player");
       if (skipped[0] === true) {
         console.log("player 1 has already skipped. Player 2 will play again");
+        setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       } else {
         console.log("player 1 will play next");
         setActivePlayer(0);
@@ -320,18 +323,14 @@ function App() {
     <>
       <div className="App">
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {!gameWon && (
-            <>
-              <PieceBoard
-                pieces={pieces[activePlayer]}
-                handleSelection={handleSelection}
-                activePlayer={activePlayer}
-              />
-              <button className="button" onClick={skipTurn}>
-                Skip Turn
-              </button>
-            </>
-          )}
+          <PieceBoard
+            pieces={pieces[activePlayer]}
+            handleSelection={handleSelection}
+            activePlayer={activePlayer}
+          />
+          <button className="button" onClick={skipTurn}>
+            Skip Turn
+          </button>
         </div>
 
         <Board
@@ -345,14 +344,13 @@ function App() {
           handleOnMouseLeave={handleOnMouseLeave}
           handlePlay={handlePlay}
         />
-        {!gameWon && (
-          <ManipulationWindow
-            selectedPiece={selectedPiece}
-            handleRotation={handleRotation}
-            handleReflection={handleReflection}
-            activePlayer={activePlayer}
-          />
-        )}
+
+        <ManipulationWindow
+          selectedPiece={selectedPiece}
+          handleRotation={handleRotation}
+          handleReflection={handleReflection}
+          activePlayer={activePlayer}
+        />
       </div>
       {gameWon && <WinnerModal></WinnerModal>}
     </>

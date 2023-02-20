@@ -15,7 +15,6 @@ const PieceWrapper = ({
       className={`piecewrapper piecewrapper-${status}`}
       id={id}
       onClick={handleSelection}
-      // player={activePlayer}
     >
       <Piece coords={coords} unitLength={16} activePlayer={activePlayer} />
     </div>

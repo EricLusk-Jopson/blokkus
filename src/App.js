@@ -322,20 +322,30 @@ function App() {
   return (
     <>
       <div className="App">
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <ManipulationWindow
-            selectedPiece={selectedPiece}
-            handleRotation={handleRotation}
-            handleReflection={handleReflection}
-            activePlayer={activePlayer}
-          />
-          <PieceBoard
-            pieces={pieces[activePlayer]}
-            handleSelection={handleSelection}
-            activePlayer={activePlayer}
-          />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <ManipulationWindow
+              selectedPiece={selectedPiece}
+              handleRotation={handleRotation}
+              handleReflection={handleReflection}
+              activePlayer={activePlayer}
+            />
+            <PieceBoard
+              pieces={pieces[activePlayer]}
+              handleSelection={handleSelection}
+              activePlayer={activePlayer}
+            />
+          </div>
+          <button className="button" onClick={skipTurn}>
+            Retire
+          </button>
         </div>
-
         <Board
           board={board}
           shadedTiles={shadedTiles}
@@ -347,11 +357,9 @@ function App() {
           handleOnMouseLeave={handleOnMouseLeave}
           handlePlay={handlePlay}
         />
-        <button className="button" onClick={skipTurn}>
-          Retire
-        </button>
       </div>
-      {gameWon && <WinnerModal></WinnerModal>}
+
+      {/* {gameWon && <WinnerModal></WinnerModal>} */}
     </>
   );
 }

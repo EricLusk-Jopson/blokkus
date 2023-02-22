@@ -17,7 +17,7 @@ code {
   flex-direction: row;
   justify-content: space-evenly;
   padding: 100px 20px;
-  height: 40vw;
+  height: 100vh;
 }
 
 .sidewindow {
@@ -25,7 +25,9 @@ code {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: calc((50vw - 60px ) / 2);
+  margin-left: 50px;
+  height: 220px;
+  width: 25vw;
   overflow-y: auto;
 }
 
@@ -66,7 +68,7 @@ code {
   background-color: orange;
 }
 
-.manipulationwindow {
+.manipulation-box {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
@@ -76,17 +78,23 @@ code {
   justify-content: center;
 }
 
-.button {
+.manipulation-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px;
   width: 200px;
-  margin: 5px;
+}
+
+.manipulation-button {
+  flex-grow: 1;
 }
 
 .board {
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */
-  width: 35vw;
-  height: 35vw;
+  width: 30vw;
+  height: 30vw;
 }
 
 .row {

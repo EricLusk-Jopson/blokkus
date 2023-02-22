@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import PieceWrapper from "./PieceWrapper";
 
@@ -23,41 +25,40 @@ const ManipulationWindow = ({
   };
 
   return (
-    <div className="sidewindow">
-      ManipulationWindow
-      <div className="manipulationwindow">
+    <div className="manipulation-window">
+      <div className="manipulation-box">
         <PieceWrapper
           coords={centrePiece(selectedPiece.coords)}
           activePlayer={activePlayer}
         />
       </div>
-      <div>
+      <div className="manipulation-button-wrapper">
         <button
-          className="button"
+          className="manipulation-button"
           onClick={(e) => {
             e.preventDefault();
             handleRotation(-1);
           }}
         >
-          {"<"}
+          <FontAwesomeIcon icon={faRotateLeft} />
         </button>
         <button
-          className="button"
+          className="manipulation-button"
           onClick={(e) => {
             e.preventDefault();
             handleRotation(1);
           }}
         >
-          {">"}
+          <FontAwesomeIcon icon={faRotateRight} />
         </button>
         <button
-          className="button"
+          className="manipulation-button"
           onClick={(e) => handleReflection("vertical")}
         >
-          {"--"}
+          {"—"}
         </button>
         <button
-          className="button"
+          className="manipulation-button"
           onClick={(e) => handleReflection("horizontal")}
         >
           {"|"}

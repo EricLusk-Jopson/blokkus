@@ -277,23 +277,16 @@ function App() {
 
   const determineNextPlayer = () => {
     if (activePlayer === 0) {
-      console.log("player 1 is the active player");
       if (retired[1] === true) {
-        console.log("player 2 has already retired. Player 1 will play again");
         setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
       } else {
-        console.log("player 2 will play next");
-        console.log(pieces[1]);
         setActivePlayer(1);
         setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       }
     } else {
-      console.log("player 2 is the active player");
       if (retired[0] === true) {
-        console.log("player 1 has already retired. Player 2 will play again");
         setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       } else {
-        console.log("player 1 will play next");
         setActivePlayer(0);
         setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
       }
@@ -301,8 +294,6 @@ function App() {
   };
 
   const retire = () => {
-    console.log(activePlayer);
-    console.log(retired);
     const newRetired = [...retired];
     newRetired[activePlayer] = true;
     setRetired(newRetired);
@@ -376,7 +367,7 @@ function App() {
         />
       </div>
 
-      {gameWon && <WinnerModal></WinnerModal>}
+      {gameWon && <WinnerModal scores={scores} />}
     </>
   );
 }

@@ -4,7 +4,6 @@ import PieceWrapper from "./PieceWrapper";
 const PieceBoard = ({ pieces, handleSelection, activePlayer }) => {
   return (
     <div className="sidewindow">
-      <h2>Piece Board</h2>
       <div className="pieces">
         {pieces.map((piece, i) => {
           return (

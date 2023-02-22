@@ -7,6 +7,8 @@ import WinnerModal from "./components/WinnerModal";
 import { initialPieces } from "./initialStates/initialPieces";
 import { initialBoard, zeroBoard } from "./initialStates/initialBoard";
 import { newZeroBoard } from "./helpers/newZeroBoard";
+import ScoreBoard from "./components/ScoreBoard";
+import { calculateScoresFromPieces } from "./helpers/calculateScores";
 
 const row = 0;
 const col = 1;
@@ -16,7 +18,7 @@ const last = 13;
 function App() {
   const numberOfPlayers = 2;
   const [activePlayer, setActivePlayer] = useState(0);
-  const [skipped, setSkipped] = useState([false, false]);
+  const [retired, setRetired] = useState([false, false]);
   const [board, setBoard] = useState(initialBoard);
   const [pieces, setPieces] = useState({
     0: [...initialPieces],
@@ -26,6 +28,7 @@ function App() {
   const [shadedTiles, setShadedTiles] = useState(zeroBoard);
   const [shadedCoords, setShadedCoords] = useState([]);
   const [turn, setTurn] = useState(1);
+  const [scores, setScores] = useState({ 0: 0, 1: 0 });
   const [gameWon, setGameWon] = useState(false);
 
   const handleSelection = (e, status) => {
@@ -79,7 +82,6 @@ function App() {
     }
 
     reflectedCoords.forEach((reflectedCoord) => {});
-    console.log(Math.min());
     const newPiece = { ...selectedPiece };
     newPiece.coords = reflectedCoords;
     setSelectedPiece(newPiece);
@@ -275,43 +277,34 @@ function App() {
 
   const determineNextPlayer = () => {
     if (activePlayer === 0) {
-      console.log("player 1 is the active player");
-      if (skipped[1] === true) {
-        console.log("player 2 has already skipped. Player 1 will play again");
+      if (retired[1] === true) {
         setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
       } else {
-        console.log("player 2 will play next");
-        console.log(pieces[1]);
         setActivePlayer(1);
         setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       }
     } else {
-      console.log("player 2 is the active player");
-      if (skipped[0] === true) {
-        console.log("player 1 has already skipped. Player 2 will play again");
+      if (retired[0] === true) {
         setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
       } else {
-        console.log("player 1 will play next");
         setActivePlayer(0);
         setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
       }
     }
   };
 
-  const skipTurn = () => {
-    console.log(activePlayer);
-    console.log(skipped);
-    const newSkipped = [...skipped];
-    newSkipped[activePlayer] = true;
-    setSkipped(newSkipped);
+  const retire = () => {
+    const newRetired = [...retired];
+    newRetired[activePlayer] = true;
+    setRetired(newRetired);
     setTurn(turn + 1);
   };
 
   useEffect(() => {
-    if (skipped[0] == true && skipped[1] == true) {
+    if (retired[0] == true && retired[1] == true) {
       setGameWon(true);
     }
-  }, [skipped]);
+  }, [retired]);
 
   useEffect(() => {
     if (turn > 1) {
@@ -319,20 +312,48 @@ function App() {
     }
   }, [turn]);
 
+  useEffect(() => {
+    const newScores = { ...scores };
+    Object.entries(pieces).forEach(([key, value]) => {
+      newScores[key] = calculateScoresFromPieces(value);
+    });
+    setScores(newScores);
+  }, [pieces]);
+
   return (
     <>
       <div className="App">
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <PieceBoard
-            pieces={pieces[activePlayer]}
-            handleSelection={handleSelection}
-            activePlayer={activePlayer}
-          />
-          <button className="button" onClick={skipTurn}>
-            Skip Turn
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <ScoreBoard scores={scores} />
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              paddingBottom: "50px",
+            }}
+          >
+            <ManipulationWindow
+              selectedPiece={selectedPiece}
+              handleRotation={handleRotation}
+              handleReflection={handleReflection}
+              activePlayer={activePlayer}
+            />
+            <PieceBoard
+              pieces={pieces[activePlayer]}
+              handleSelection={handleSelection}
+              activePlayer={activePlayer}
+            />
+          </div>
+          <button className="button-retire" onClick={retire}>
+            Retire
           </button>
         </div>
-
         <Board
           board={board}
           shadedTiles={shadedTiles}
@@ -344,15 +365,9 @@ function App() {
           handleOnMouseLeave={handleOnMouseLeave}
           handlePlay={handlePlay}
         />
-
-        <ManipulationWindow
-          selectedPiece={selectedPiece}
-          handleRotation={handleRotation}
-          handleReflection={handleReflection}
-          activePlayer={activePlayer}
-        />
       </div>
-      {gameWon && <WinnerModal></WinnerModal>}
+
+      {gameWon && <WinnerModal scores={scores} />}
     </>
   );
 }

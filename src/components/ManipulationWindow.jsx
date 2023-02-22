@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import PieceWrapper from "./PieceWrapper";
 
@@ -23,41 +25,45 @@ const ManipulationWindow = ({
   };
 
   return (
-    <div className="sidewindow">
-      ManipulationWindow
-      <div className="manipulationwindow">
+    <div className="manipulation-window">
+      <div className="manipulation-box">
         <PieceWrapper
           coords={centrePiece(selectedPiece.coords)}
           activePlayer={activePlayer}
         />
       </div>
-      <button
-        className="button"
-        onClick={(e) => {
-          e.preventDefault();
-          handleRotation(-1);
-        }}
-      >
-        Rotate Left
-      </button>
-      <button
-        className="button"
-        onClick={(e) => {
-          e.preventDefault();
-          handleRotation(1);
-        }}
-      >
-        Rotate Right
-      </button>
-      <button className="button" onClick={(e) => handleReflection("vertical")}>
-        Flip Up
-      </button>
-      <button
-        className="button"
-        onClick={(e) => handleReflection("horizontal")}
-      >
-        Flip Sideways
-      </button>
+      <div className="manipulation-button-wrapper">
+        <button
+          className="manipulation-button"
+          onClick={(e) => {
+            e.preventDefault();
+            handleRotation(-1);
+          }}
+        >
+          <FontAwesomeIcon icon={faRotateLeft} />
+        </button>
+        <button
+          className="manipulation-button"
+          onClick={(e) => {
+            e.preventDefault();
+            handleRotation(1);
+          }}
+        >
+          <FontAwesomeIcon icon={faRotateRight} />
+        </button>
+        <button
+          className="manipulation-button"
+          onClick={(e) => handleReflection("vertical")}
+        >
+          {"—"}
+        </button>
+        <button
+          className="manipulation-button"
+          onClick={(e) => handleReflection("horizontal")}
+        >
+          {"|"}
+        </button>
+      </div>
     </div>
   );
 };

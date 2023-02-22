@@ -17,7 +17,6 @@ code {
   flex-direction: row;
   justify-content: space-evenly;
   padding: 100px 20px;
-  height: 40vw;
 }
 
 .sidewindow {
@@ -25,7 +24,9 @@ code {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: calc((50vw - 60px ) / 2);
+  margin-left: 50px;
+  height: 220px;
+  max-width: 25vw;
   overflow-y: auto;
 }
 
@@ -66,7 +67,7 @@ code {
   background-color: orange;
 }
 
-.manipulationwindow {
+.manipulation-box {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
@@ -76,9 +77,30 @@ code {
   justify-content: center;
 }
 
-.button {
+.manipulation-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px;
   width: 200px;
-  margin: 5px;
+}
+
+.manipulation-button {
+  flex-grow: 1;
+}
+
+.scorebox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  padding-bottom: 50px;
+}
+
+.button-retire {
+  height: 30px;
+  border-radius: 10px;
+  background-color: rgb(232, 152, 152);
+  font-weight: bold;
 }
 
 .board {
@@ -129,4 +151,19 @@ code {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.modal-window {
+  height: 200px;
+  width: 400px;
+  border-radius: 5px;
+  background-color: antiquewhite;
+  align-self: center;
+  text-align: center;
+  font-size: x-large;
+  font-weight: 500;
+  
 }

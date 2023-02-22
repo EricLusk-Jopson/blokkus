@@ -8,6 +8,7 @@ import { initialPieces } from "./initialStates/initialPieces";
 import { initialBoard, zeroBoard } from "./initialStates/initialBoard";
 import { newZeroBoard } from "./helpers/newZeroBoard";
 import ScoreBoard from "./components/ScoreBoard";
+import { calculateScoresFromPieces } from "./helpers/calculateScores";
 
 const row = 0;
 const col = 1;
@@ -27,6 +28,7 @@ function App() {
   const [shadedTiles, setShadedTiles] = useState(zeroBoard);
   const [shadedCoords, setShadedCoords] = useState([]);
   const [turn, setTurn] = useState(1);
+  const [scores, setScores] = useState({ 0: 0, 1: 0 });
   const [gameWon, setGameWon] = useState(false);
 
   const handleSelection = (e, status) => {
@@ -319,6 +321,14 @@ function App() {
     }
   }, [turn]);
 
+  useEffect(() => {
+    const newScores = { ...scores };
+    Object.entries(pieces).forEach(([key, value]) => {
+      newScores[key] = calculateScoresFromPieces(value);
+    });
+    setScores(newScores);
+  }, [pieces]);
+
   return (
     <>
       <div className="App">
@@ -326,10 +336,17 @@ function App() {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <ScoreBoard scores={scores} />
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              paddingBottom: "50px",
+            }}
+          >
             <ManipulationWindow
               selectedPiece={selectedPiece}
               handleRotation={handleRotation}
@@ -342,8 +359,7 @@ function App() {
               activePlayer={activePlayer}
             />
           </div>
-          <ScoreBoard scores={pieces} />
-          <button className="button" onClick={retire}>
+          <button className="button-retire" onClick={retire}>
             Retire
           </button>
         </div>

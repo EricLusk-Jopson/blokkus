@@ -7,6 +7,7 @@ import WinnerModal from "./components/WinnerModal";
 import { initialPieces } from "./initialStates/initialPieces";
 import { initialBoard, zeroBoard } from "./initialStates/initialBoard";
 import { newZeroBoard } from "./helpers/newZeroBoard";
+import ScoreBoard from "./components/ScoreBoard";
 
 const row = 0;
 const col = 1;
@@ -297,7 +298,7 @@ function App() {
     }
   };
 
-  const skipTurn = () => {
+  const retire = () => {
     console.log(activePlayer);
     console.log(retired);
     const newRetired = [...retired];
@@ -341,7 +342,8 @@ function App() {
               activePlayer={activePlayer}
             />
           </div>
-          <button className="button" onClick={skipTurn}>
+          <ScoreBoard scores={pieces} />
+          <button className="button" onClick={retire}>
             Retire
           </button>
         </div>
@@ -358,7 +360,7 @@ function App() {
         />
       </div>
 
-      {/* {gameWon && <WinnerModal></WinnerModal>} */}
+      {gameWon && <WinnerModal></WinnerModal>}
     </>
   );
 }

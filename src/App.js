@@ -79,7 +79,6 @@ function App() {
     }
 
     reflectedCoords.forEach((reflectedCoord) => {});
-    console.log(Math.min());
     const newPiece = { ...selectedPiece };
     newPiece.coords = reflectedCoords;
     setSelectedPiece(newPiece);

@@ -302,7 +302,7 @@ function App() {
   const resetGame = () => {
     setActivePlayer(0);
     setRetired([false, false]);
-    setBoard(initialBoard);
+    setBoard([...initialBoard]);
     setPieces({ 0: [...initialPieces], 1: [...initialPieces] });
     setSelectedPiece({ ...initialPieces[0] });
     setShadedTiles(zeroBoard);
@@ -351,10 +351,11 @@ function App() {
           </div>
 
           <div
+            className={`neon-container-${activePlayer}`}
             style={{
               display: "flex",
               flexDirection: "row",
-              paddingBottom: "50px",
+              padding: "40px",
             }}
           >
             <ManipulationWindow

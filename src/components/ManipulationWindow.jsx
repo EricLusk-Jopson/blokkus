@@ -40,7 +40,7 @@ const ManipulationWindow = ({
             handleRotation(-1);
           }}
         >
-          <FontAwesomeIcon icon={faRotateLeft} />
+          <FontAwesomeIcon className="icon" icon={faRotateLeft} />
         </button>
         <button
           className="manipulation-button"
@@ -49,7 +49,7 @@ const ManipulationWindow = ({
             handleRotation(1);
           }}
         >
-          <FontAwesomeIcon icon={faRotateRight} />
+          <FontAwesomeIcon className="icon" icon={faRotateRight} />
         </button>
         <button
           className="manipulation-button"

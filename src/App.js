@@ -343,7 +343,12 @@ function App() {
             justifyContent: "space-around",
           }}
         >
-          <ScoreBoard scores={scores} />
+          <div style={{ display: "inline-flex", position: "relative" }}>
+            <ScoreBoard scores={scores} />
+            <button className="button-retire" onClick={retire}>
+              Retire
+            </button>
+          </div>
 
           <div
             style={{
@@ -364,9 +369,6 @@ function App() {
               activePlayer={activePlayer}
             />
           </div>
-          <button className="button-retire" onClick={retire}>
-            Retire
-          </button>
         </div>
         <Board
           board={board}

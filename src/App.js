@@ -5,7 +5,7 @@ import Board from "./components/Board.jsx";
 import ManipulationWindow from "./components/ManipulationWindow";
 import WinnerModal from "./components/WinnerModal";
 import { initialPieces } from "./initialStates/initialPieces";
-import { initialBoard, zeroBoard } from "./initialStates/initialBoard";
+import { newInitalBoard, zeroBoard } from "./initialStates/initialBoard";
 import { newZeroBoard } from "./helpers/newZeroBoard";
 import ScoreBoard from "./components/ScoreBoard";
 import { calculateScoresFromPieces } from "./helpers/calculateScores";
@@ -18,13 +18,13 @@ const last = 13;
 function App() {
   const [activePlayer, setActivePlayer] = useState(0);
   const [retired, setRetired] = useState([false, false]);
-  const [board, setBoard] = useState(initialBoard);
+  const [board, setBoard] = useState(newInitalBoard());
   const [pieces, setPieces] = useState({
     0: [...initialPieces],
     1: [...initialPieces],
   });
   const [selectedPiece, setSelectedPiece] = useState({ ...initialPieces[0] });
-  const [shadedTiles, setShadedTiles] = useState(zeroBoard);
+  const [shadedTiles, setShadedTiles] = useState(newZeroBoard());
   const [shadedCoords, setShadedCoords] = useState([]);
   const [turn, setTurn] = useState(1);
   const [scores, setScores] = useState({ 0: 0, 1: 0 });
@@ -302,10 +302,10 @@ function App() {
   const resetGame = () => {
     setActivePlayer(0);
     setRetired([false, false]);
-    setBoard([...initialBoard]);
+    setBoard(newInitalBoard());
     setPieces({ 0: [...initialPieces], 1: [...initialPieces] });
     setSelectedPiece({ ...initialPieces[0] });
-    setShadedTiles(zeroBoard);
+    setShadedTiles(newZeroBoard());
     setShadedCoords([]);
     setTurn(1);
     setScores({ 0: 0, 1: 0 });

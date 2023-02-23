@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import PieceBoard from "./components/PieceBoard.jsx";
 import Board from "./components/Board.jsx";
@@ -16,7 +16,6 @@ const first = 0;
 const last = 13;
 
 function App() {
-  const numberOfPlayers = 2;
   const [activePlayer, setActivePlayer] = useState(0);
   const [retired, setRetired] = useState([false, false]);
   const [board, setBoard] = useState(initialBoard);
@@ -62,8 +61,8 @@ function App() {
       yCoords.add(Math.abs(coord[0]));
       xCoords.add(Math.abs(coord[1]));
     });
-    const xMax = Math.max(...xCoords);
-    const yMax = Math.max(...yCoords);
+    // const xMax = Math.max(...xCoords);
+    // const yMax = Math.max(...yCoords);
     switch (axis) {
       case "vertical":
         selectedCoords.forEach((coord) => {
@@ -278,17 +277,17 @@ function App() {
   const determineNextPlayer = () => {
     if (activePlayer === 0) {
       if (retired[1] === true) {
-        setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
+        setSelectedPiece(pieces[0].find((piece) => piece.status !== "used"));
       } else {
         setActivePlayer(1);
-        setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
+        setSelectedPiece(pieces[1].find((piece) => piece.status !== "used"));
       }
     } else {
       if (retired[0] === true) {
-        setSelectedPiece(pieces[1].find((piece) => piece.status != "used"));
+        setSelectedPiece(pieces[1].find((piece) => piece.status !== "used"));
       } else {
         setActivePlayer(0);
-        setSelectedPiece(pieces[0].find((piece) => piece.status != "used"));
+        setSelectedPiece(pieces[0].find((piece) => piece.status !== "used"));
       }
     }
   };
@@ -300,8 +299,21 @@ function App() {
     setTurn(turn + 1);
   };
 
+  const resetGame = () => {
+    setActivePlayer(0);
+    setRetired([false, false]);
+    setBoard(initialBoard);
+    setPieces({ 0: [...initialPieces], 1: [...initialPieces] });
+    setSelectedPiece({ ...initialPieces[0] });
+    setShadedTiles(zeroBoard);
+    setShadedCoords([]);
+    setTurn(1);
+    setScores({ 0: 0, 1: 0 });
+    setGameWon(false);
+  };
+
   useEffect(() => {
-    if (retired[0] == true && retired[1] == true) {
+    if (retired[0] === true && retired[1] === true) {
       setGameWon(true);
     }
   }, [retired]);
@@ -327,6 +339,8 @@ function App() {
           style={{
             display: "flex",
             flexDirection: "column",
+            height: "35vw",
+            justifyContent: "space-around",
           }}
         >
           <ScoreBoard scores={scores} />
@@ -367,7 +381,7 @@ function App() {
         />
       </div>
 
-      {gameWon && <WinnerModal scores={scores} />}
+      {gameWon && <WinnerModal scores={scores} rematchFnc={resetGame} />}
     </>
   );
 }

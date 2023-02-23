@@ -157,7 +157,7 @@ code {
 }
 
 .modal-window {
-  height: 200px;
+  min-height: 200px;
   width: 400px;
   border-radius: 5px;
   background-color: antiquewhite;
@@ -165,5 +165,11 @@ code {
   text-align: center;
   font-size: x-large;
   font-weight: 500;
+}
+
+.rematch-button {
+  width: calc(100% - 4px);
+  height: 40px;
+  margin: 2px;
   
 }

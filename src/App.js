@@ -120,6 +120,9 @@ function App() {
   };
 
   // TODO - Break up this function into helpers
+  // For determining playability
+  // For determining seedability
+  // for updating the board
   const handlePlay = (e, valid) => {
     e.stopPropagation();
     e.preventDefault();

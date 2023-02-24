@@ -119,6 +119,7 @@ function App() {
     setShadedCoords([]);
   };
 
+  // TODO - Break up this function into helpers
   const handlePlay = (e, valid) => {
     e.stopPropagation();
     e.preventDefault();
